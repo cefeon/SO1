@@ -1,6 +1,6 @@
 #!/bin/bash
 #Author: Dawid Dziembor
-#All rights reserved
+#Some rights reserved
 
 pattern=$1
 ext1=$2
