@@ -30,9 +30,9 @@ for file in $dir1/*
 do
    if [ -f $file ]
    then
-      f_name=${file%.*} #Sh Parameter Expansion - all chars to '.'
-      f_name=${f_name##*/} #Sh Parameter Expansion
-      f_ext=${file##*.} #Sh Parameter Expansion - chars without those before '.'
+      f_name=${file%.*} #Remove all chars from end to first .
+      f_name=${f_name##*/} #Remove all chars from start to last /
+      f_ext=${file##*.} #Remove all chars from start to last .
       check_pattern $f_name $pattern $f_ext $ext1 $ext2 $dir2
    fi
 done
