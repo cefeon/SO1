@@ -7,25 +7,6 @@ ext2=$3
 dir1=$4
 dir2=$5
 
-#arguments:
-#$1 current file name
-#$2 name pattern
-#$3 current file extension
-#$4 extension pattern
-#$5 destination extension pattern
-#$6 destination directory
-check_pattern (){
-   if [[ $1 == *"$2"* ]]
-   then
-      if [[ ".$3" == "$4" ]]
-      then
-         cp $1\.$3 $1$5
-         mv $1$5 $6
-      fi
-   fi
-}
-
-#lists of all normal files with regex pattern
 for file in $dir1/*
 do
    if [ -f $file ]
@@ -33,7 +14,14 @@ do
       f_name=${file%.*} #Remove all chars from end to first .
       f_name=${f_name##*/} #Remove all chars from start to last /
       f_ext=${file##*.} #Remove all chars from start to last .
-      check_pattern $f_name $pattern $f_ext $ext1 $ext2 $dir2
+      if [[ $f_name == *"$pattern"* ]]
+      then
+         if [[ ".$f_ext" == "$ext1" ]]
+         then
+            cp $f_name$ext1 $f_name$ext2
+            mv $f_name$ext2 $dir2
+         fi
+      fi
    fi
 done
 
