@@ -18,11 +18,8 @@ do
       then
          if [[ ".$f_ext" == "$ext1" ]]
          then
-            cp $dir1/$f_name$ext1 $f_name$ext2
-            mv $dir1/$f_name$ext2 $dir2/
+            cp $dir1/$f_name$ext1 $dir2/$f_name$ext2
          fi
       fi
    fi
 done
-
-
