@@ -7,8 +7,27 @@ ext2=$3
 dir1=$4
 dir2=$5
 
-for file in $dir1/*
+if [ "$#" -le 4 ]; then
+    printf "\nMissing arguments, should be: \n\n"
+    printf "script pattern .ext1 .ext2 dir1 dir2 \n\n"
+    exit 2
+fi
+
+if [ "$#" -gt 5 ]; then
+    printf "\nToo much arguments, should be: \n\n"
+    printf "script pattern .ext1 .ext2 dir1 dir2 \n\n"
+    exit 2
+fi
+
+F(){
+for file in "$dir1"/*
 do
+   if [ -d $file ]
+   then
+      dir1=$file
+      F
+   fi
+   
    if [ -f $file ]
    then
       f_name=${file%.*} #Remove all chars from end to first . (with .)
@@ -23,3 +42,5 @@ do
       fi
    fi
 done
+}
+F
