@@ -2,9 +2,9 @@
 # Author: Dawid Dziembor
 # Some rights reserved
 
-###################
-# Start of errors #
-###################
+###########################
+# Start of error handling #
+###########################
 if [ "$#" -le 4 ]; then
     printf "\nMissing arguments, should be: \n\n"
     printf "$0 pattern .ext1 .ext2 dir1 dir2 \n\n"
@@ -64,26 +64,31 @@ if [[ ! -w $5 ]]; then
     printf "To add read permission use: chmod +r $5  \n\n"
     exit 2
 fi
-##################
-# End of errors  #
-##################
+##########################
+# End of error handling  #
+##########################
 
 
-pattern=$1
-ext1=$2
-ext2=$3
-dir1=$4
-dir2=$5
+##############################
+# Start of variable renaming #
+##############################
 
-# source file: read permission.
+PATTERN=$1
+SRC_EXT=$2
+DEST_EXT=$3
+SRC_DIR=$4
+DEST_DIR=$5
+
+############################
+# End of variable renaming #
+############################
 
 find_and_copy(){
 local directory=$1
 local file
 for file in "$directory"/*
 do
-   if [ -d "$file" ]
-   then
+   if [ -d "$file" ]; then
       find_and_copy "$file"
    fi
    
@@ -91,13 +96,13 @@ do
       f_name=${file%.*} # Remove all chars from end to first . (with .)
       f_name=${f_name##*/} # Remove all chars from start to last /
       f_ext=.${file##*.} # Remove all chars from start to last . (with .)
-      if [[ "$f_name" == *"$pattern"* ]]; then
-         if [[ "$f_ext" == "$ext1" ]]; then
-            if [[ ! -r "$directory"/$f_name$ext1 ]]; then
-               printf "Missing read permission in "$directory"/$f_name$ext1 \n"
+      if [[ "$f_name" == *"$PATTERN"* ]]; then
+         if [[ "$f_ext" == "$SRC_EXT" ]]; then
+            if [[ ! -r "$directory"/$f_name$SRC_EXT ]]; then
+               printf "\e[31m Missing read permission in \e[0m "$directory"/$f_name$SRC_EXT \n"
             else
-            cp "$directory"/$f_name$ext1 "$dir2"/$f_name$ext2
-            printf "copied $directory/$f_name$ext1 to $dir2/$f_name$ext2 \n"
+            cp "$directory"/$f_name$SRC_EXT "$DEST_DIR"/$f_name$DEST_EXT
+            printf "\e[32m Copied\e[0m $directory/$f_name$SRC_EXT to $DEST_DIR/$f_name$DEST_EXT \n"
             fi
          fi
       fi
@@ -105,5 +110,5 @@ do
 done
 }
 
-find_and_copy "$dir1"
+find_and_copy "$SRC_DIR"
 
